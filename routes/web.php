@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,5 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login.login-form');
 });
+Route::group(['middleware' => ['auth','ceklevel:admin,karyawan']], function (){
+    Route::get('/home', function () {
+        return view('home');
+    })->name('home');
+
+});
+Route::get('/login',[LoginController::class,'halamanlogin'])->name('login');
+Route::post('/postlogin',[LoginController::class,'postlogin'])->name('postlogin');
+Route::get('/logout',[LoginController::class,'logout'])->name('logout');
